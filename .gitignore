@@ -1,0 +1,6 @@
+*.exe
+thorvg/
+*.a
+*.dll
+*.dll.a
+lib/
