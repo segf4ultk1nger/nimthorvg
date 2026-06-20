@@ -2,20 +2,17 @@ import thorvg_capi
 import engine
 import canvas, paint
 
-type Scene* = object of Paint
-
-proc `=destroy`*(scene: var Scene) =
-  if scene.handle != nil:
-    discard tvgPaintUnref(scene.handle, true)
-    scene.handle = nil
+type
+  # 【修改】为了和 Paint 体系统一，Scene 必须也是 ref 结构，且继承自 PaintObj
+  SceneObj* = object of PaintObj
+  Scene* = ref SceneObj
 
 proc newScene*(): Scene =
-  let handle = tvg_scene_new()
+  let handle = tvgSceneNew() # 统一改为与 CAPI 一致的下划线/驼峰（请根据你实际的 capi 绑定微调）
   if handle == nil:
     raise newException(ThorVGError, "Failed to create scene")
-
-  result = Scene()
-  result.handle = handle
+  result = Scene(handle: handle)
+  discard tvgPaintRef(handle)
 
 proc init*(
     scene: var Scene, canvas: SwCanvas

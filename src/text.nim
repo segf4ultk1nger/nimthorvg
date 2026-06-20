@@ -1,25 +1,21 @@
 import thorvg_capi
 import engine, paint, shape, gradient
-export engine, paint, shape, gradient
 
 type
-  TextObj* = object of Paint
+  # 【修改】继承自 PaintObj，而不是 ref Paint
+  TextObj* = object of PaintObj
 
   Text* = ref TextObj
 
   TextMetrics* = TvgTextMetrics
   GlyphMetrics* = TvgGlyphMetrics
 
-proc `=destroy`*(text: var TextObj) =
-  if text.handle != nil:
-    discard tvgPaintUnref(text.handle, true)
-    text.handle = nil
-
 proc newText*(): Text =
   let h = tvgTextNew()
   if h == nil:
     raise newException(ThorVGError, "Failed to create ThorVG Text object")
   result = Text(handle: h)
+  discard tvgPaintRef(h)
 
 proc `font=`*(text: Text, name: string) =
   let fontName = if name.len == 0: nil else: name.cstring

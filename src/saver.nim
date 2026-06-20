@@ -1,6 +1,5 @@
 import thorvg_capi
-import engine, canvas, paint, animation
-export engine, paint, canvas, animation
+import engine, paint, animation
 
 type
   SaverObj* = object of RootObj

@@ -19,10 +19,14 @@ proc checkResult*(res: Tvg_Result) =
 
 proc getVersion*(): tuple[major, minor, micro: uint32, version: string] =
   var major, minor, micro: uint32
-  var version: cstringArray = nil
-  checkResult(tvgEngineVersion(addr major, addr minor, addr micro, version))
-  let versionStr = if version != nil and version[0] != nil: $version[0] else: "" 
-  result = (major, minor, micro, versionStr)
+  var versionStr: cstring = nil  # 初始化一个空 cstring
+  
+  # 🎯 核心修改：第四个参数传入 addr versionStr
+  checkResult(tvgEngineVersion(addr major, addr minor, addr micro, addr versionStr))
+  
+  # 转换回 Nim 的 string
+  let version = if versionStr != nil: $versionStr else: ""
+  result = (major, minor, micro, version)
 
 type ThorEngine* = object
 

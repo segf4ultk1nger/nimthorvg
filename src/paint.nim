@@ -1,9 +1,5 @@
 import std/math
-import chroma
 import vmath
-
-export chroma
-
 import engine
 import thorvg_capi
 
@@ -11,20 +7,19 @@ type
   Matrix* = TvgMatrix
   Point* = TvgPoint
 
-type Paint* = object of RootObj
-  handle*: TvgPaint
+type 
+  # 1. 拆分出底层对象，必须打上 {.inheritable.} 标记，允许 Shape 继承
+  PaintObj* {.inheritable.} = object of RootObj
+    handle*: TvgPaint
 
-proc `=destroy`*(paint: Paint) =
+  # 2. 对外暴露的 Paint 改为 ref 引用类型
+  Paint* = ref PaintObj
+
+# 3. 将生命周期挂钩应用在底层 PaintObj 上，由 Nim ARC/ORC 自动管理
+proc `=destroy`*(paint: var PaintObj) =
   if paint.handle != nil:
     discard tvgPaintUnref(paint.handle, true)
-
-proc `=copy`*(dest: var Paint, src: Paint) =
-  if dest.handle == src.handle: return
-  if dest.handle != nil:
-    discard tvgPaintUnref(dest.handle, true)
-  dest.handle = src.handle
-  if dest.handle != nil:
-    discard tvgPaintRef(dest.handle)
+    paint.handle = nil
 
 proc isNil*(paint: Paint): bool =
   paint.handle == nil

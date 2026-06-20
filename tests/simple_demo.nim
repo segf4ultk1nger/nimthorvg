@@ -1,9 +1,6 @@
 import std/strformat
 
-import src/engine
-import src/canvas
-import src/scene
-import src/shape
+import ../src/nimthorvg
 
 const
   DemoWidth = 128

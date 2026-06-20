@@ -1,6 +1,5 @@
 import thorvg_capi
 import engine, paint, shape
-export engine, paint, shape
 
 type
   GradientObj* = object of RootObj
@@ -8,10 +7,12 @@ type
 
   Gradient* = ref GradientObj
 
-  LinearGradient* = ref object of Gradient
+  # 【修改】基类必须是底层的 object 类型 (GradientObj)，而不是 ref 类型 (Gradient)
+  LinearGradient* = ref object of GradientObj
     x1*, y1*, x2*, y2*: float
 
-  RadialGradient* = ref object of Gradient
+  # 【修改】基类必须是底层的 object 类型 (GradientObj)
+  RadialGradient* = ref object of GradientObj
     cx*, cy*, r*, fx*, fy*, fr*: float
 
   ColorStop* = object

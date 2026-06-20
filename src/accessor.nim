@@ -1,6 +1,5 @@
 import thorvg_capi
-import engine, canvas
-export engine
+import engine, paint
 
 type
   AccessorObj* = object of RootObj
@@ -14,7 +13,8 @@ var currentNimCallback {.threadvar.}: AccessorCallback
 
 proc nativeAccessorCb(paintHandle: TvgPaint, data: pointer): bool {.cdecl.} =
   if currentNimCallback != nil and paintHandle != nil:
-    let p = Paint(handle: paintHandle)
+    # 【修改】因为 Paint 变成了 ref，这里必须通过构造过程创建，不能用 Paint(handle: ...)
+    let p = newPaint(paintHandle) 
     return currentNimCallback(p)
   return false
 

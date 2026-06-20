@@ -1,36 +1,31 @@
 import std/sequtils
 import chroma
 import vmath, bumpy
-export vmath, bumpy
-
 import thorvg_capi
 import engine, canvas, paint, scene
-export chroma, engine, paint, canvas, scene
+export vmath, chroma, bumpy, engine, paint, canvas, scene
 
 type
-  Shape* = object of Paint
-
-proc `=destroy`*(shape: var Shape) =
-  if shape.handle != nil:
-    discard tvgPaintUnref(shape.handle,true)
-    shape.handle = nil
+  # 【修改】与上面同理，Shape 必须继承 PaintObj，并声明为 ref 类型
+  ShapeObj* = object of PaintObj
+  Shape* = ref ShapeObj
 
 type
   PathBuilder* = object
     shape: Shape
 
 proc newShape*(): Shape =
-  let handle = tvg_shape_new()
+  let handle = tvgShapeNew() # 统一规范底层 C 函数调用名
   if handle == nil:
     raise newException(ThorVGError, "Failed to create shape")
-  result = Shape()
-  result.handle = handle
+  result = Shape(handle: handle)
+  discard tvgPaintRef(handle)
 
 proc reset*(shape: Shape) =
   checkResult(tvgShapeReset(shape.handle))
 
 proc init*(shape: var Shape, scene: Scene, reset: bool = true): bool {.discardable.} =
-  if shape.handle == nil:
+  if shape == nil or shape.handle == nil:
     shape = newShape()
     scene.push(shape)
     result = true
@@ -83,7 +78,7 @@ proc add*(
     rx: float = 0,
     ry: float = 0,
     clockwise: bool = true,
-): lent Shape {.discardable.} =
+): Shape {.discardable.} =
   when dims is Rect:
     shape.addRect(dims.x, dims.y, dims.w, dims.h, rx, ry, clockwise)
   elif dims is Circle:
@@ -236,28 +231,28 @@ proc newEllipse*(center: Vec2, rx, ry: float): Shape =
   result = newShape()
   result.addCircle(center.x, center.y, rx, ry)
 
-proc fill*(shape: Shape, color: SomeColor): lent Shape {.discardable.} =
+proc fill*(shape: Shape, color: SomeColor): Shape {.discardable.} =
   shape.setFillColor(color)
   result = shape
 
-proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): lent Shape {.discardable.} =
+proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): Shape {.discardable.} =
   shape.setFillColor(r, g, b, a)
   result = shape
 
 proc stroke*(
     shape: Shape, color: SomeColor, width: float = 1.0
-): lent Shape {.discardable.} =
+): Shape {.discardable.} =
   shape.setStrokeColor(color)
   shape.setStrokeWidth(width)
   result = shape
 
 proc stroke*(
     shape: Shape, r, g, b: uint8, width: float = 1.0, a: uint8 = 255
-): lent Shape {.discardable.} =
+): Shape {.discardable.} =
   shape.setStrokeColor(r, g, b, a)
   shape.setStrokeWidth(width)
   result = shape
 
-proc strokeWidth*(shape: Shape, width: float): lent Shape {.discardable.} =
+proc strokeWidth*(shape: Shape, width: float): Shape {.discardable.} =
   shape.setStrokeWidth(width)
   result = shape

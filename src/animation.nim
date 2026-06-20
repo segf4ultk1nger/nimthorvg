@@ -1,6 +1,5 @@
 import thorvg_capi
-import engine, paint, picture
-export engine, paint, picture
+import engine, picture
 
 type
   AnimationObj* = object of RootObj

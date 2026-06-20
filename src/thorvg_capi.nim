@@ -213,7 +213,10 @@ proc tvgEngineInit*(threads: cuint): TvgResult {.importc: "tvg_engine_init".}
 proc tvgEngineTerm*(): TvgResult {.importc: "tvg_engine_term".}
 
 proc tvgEngineVersion*(
-  major: ptr uint32, minor: ptr uint32, micro: ptr uint32, version: cstringArray
+  major: ptr uint32, 
+  minor: ptr uint32, 
+  micro: ptr uint32, 
+  version: ptr cstring
 ): TvgResult {.importc: "tvg_engine_version".}
 
 proc tvgSwcanvasCreate*(op: TvgEngineOption): TvgCanvas {.importc: "tvg_swcanvas_create".}

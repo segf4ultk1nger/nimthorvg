@@ -1,7 +1,5 @@
 import thorvg_capi
 import engine
-export engine
-
 type
   LottieAnimationObj* = object of RootObj
     handle*: TvgAnimation
