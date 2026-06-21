@@ -6,16 +6,14 @@ import engine, canvas, paint, scene
 export vmath, chroma, bumpy, engine, paint, canvas, scene
 
 type
-  # 【修改】与上面同理，Shape 必须继承 PaintObj，并声明为 ref 类型
   ShapeObj* = object of PaintObj
   Shape* = ref ShapeObj
 
-type
-  PathBuilder* = object
-    shape: Shape
+type PathBuilder* = object
+  shape: Shape
 
 proc newShape*(): Shape =
-  let handle = tvgShapeNew() # 统一规范底层 C 函数调用名
+  let handle = tvgShapeNew()
   if handle == nil:
     raise newException(ThorVGError, "Failed to create shape")
   result = Shape(handle: handle)

@@ -2,8 +2,7 @@ import thorvg_capi
 import paint, canvas, engine
 
 type
-  # 【修改】继承自 PaintObj，而不是 ref Paint
-  PictureObj* = object of PaintObj 
+  PictureObj* = object of PaintObj
   Picture* = ref PictureObj
 
 proc newPicture*(): Picture =
@@ -11,7 +10,7 @@ proc newPicture*(): Picture =
   if h == nil:
     raise newException(ThorVGError, "Failed to create ThorVG Picture object")
   result = Picture(handle: h)
-  discard tvgPaintRef(h) # 必须增加引用计数，与基类 PaintObj 的 =destroy 对应
+  discard tvgPaintRef(h)
 
 proc load*(picture: Picture, path: string): Picture {.discardable, inline.} =
   if path.len == 0:

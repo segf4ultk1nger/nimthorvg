@@ -7,15 +7,12 @@ type
   Matrix* = TvgMatrix
   Point* = TvgPoint
 
-type 
-  # 1. 拆分出底层对象，必须打上 {.inheritable.} 标记，允许 Shape 继承
+type
   PaintObj* {.inheritable.} = object of RootObj
     handle*: TvgPaint
 
-  # 2. 对外暴露的 Paint 改为 ref 引用类型
   Paint* = ref PaintObj
 
-# 3. 将生命周期挂钩应用在底层 PaintObj 上，由 Nim ARC/ORC 自动管理
 proc `=destroy`*(paint: var PaintObj) =
   if paint.handle != nil:
     discard tvgPaintUnref(paint.handle, true)

@@ -2,7 +2,6 @@ import thorvg_capi
 import engine, paint, shape, gradient
 
 type
-  # 【修改】继承自 PaintObj，而不是 ref Paint
   TextObj* = object of PaintObj
 
   Text* = ref TextObj
@@ -121,9 +120,7 @@ proc loadFontData*(
   if name.len == 0 or data.len == 0:
     raise newException(ValueError, "Font name and data buffer cannot be empty")
   checkResult(
-    tvgFontLoadData(
-      name.cstring, data.cstring, data.len.uint32, mimetype.cstring, copy
-    )
+    tvgFontLoadData(name.cstring, data.cstring, data.len.uint32, mimetype.cstring, copy)
   )
 
 proc unloadFont*(path: string) =

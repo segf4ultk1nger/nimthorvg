@@ -1,14 +1,11 @@
 import std/os
 
 when defined(windows):
-  const
-    ThorvgDll = "libthorvg-1.dll"
+  const ThorvgDll = "libthorvg-1.dll"
 elif defined(macosx):
-  const
-    ThorvgDll = "libthorvg-1.dylib"
+  const ThorvgDll = "libthorvg-1.dylib"
 else:
-  const
-    ThorvgDll = "libthorvg-1.so"
+  const ThorvgDll = "libthorvg-1.so"
 
 when defined(staticThorvg) or defined(TVG_STATIC):
   when defined(windows):
@@ -28,7 +25,7 @@ when defined(staticThorvg) or defined(TVG_STATIC):
   else:
     {.passL: "-L/usr/local/lib -lthorvg -lstdc++".}
   {.push cdecl.}
-else:  
+else:
   {.push dynlib: ThorvgDll.}
 
 type
@@ -213,13 +210,12 @@ proc tvgEngineInit*(threads: cuint): TvgResult {.importc: "tvg_engine_init".}
 proc tvgEngineTerm*(): TvgResult {.importc: "tvg_engine_term".}
 
 proc tvgEngineVersion*(
-  major: ptr uint32, 
-  minor: ptr uint32, 
-  micro: ptr uint32, 
-  version: ptr cstring
+  major: ptr uint32, minor: ptr uint32, micro: ptr uint32, version: ptr cstring
 ): TvgResult {.importc: "tvg_engine_version".}
 
-proc tvgSwcanvasCreate*(op: TvgEngineOption): TvgCanvas {.importc: "tvg_swcanvas_create".}
+proc tvgSwcanvasCreate*(
+  op: TvgEngineOption
+): TvgCanvas {.importc: "tvg_swcanvas_create".}
 
 proc tvgSwcanvasSetTarget*(
   canvas: TvgCanvas,
@@ -232,15 +228,23 @@ proc tvgSwcanvasSetTarget*(
 
 proc tvgCanvasDestroy*(canvas: TvgCanvas): TvgResult {.importc: "tvg_canvas_destroy".}
 
-proc tvgCanvasAdd*(canvas: TvgCanvas, paint: TvgPaint): TvgResult {.importc: "tvg_canvas_add".}
+proc tvgCanvasAdd*(
+  canvas: TvgCanvas, paint: TvgPaint
+): TvgResult {.importc: "tvg_canvas_add".}
 
-proc tvgCanvasInsert*(canvas: TvgCanvas, target: TvgPaint, at: TvgPaint): TvgResult {.importc: "tvg_canvas_insert".}
+proc tvgCanvasInsert*(
+  canvas: TvgCanvas, target: TvgPaint, at: TvgPaint
+): TvgResult {.importc: "tvg_canvas_insert".}
 
-proc tvgCanvasRemove*(canvas: TvgCanvas, paint: TvgPaint): TvgResult {.importc: "tvg_canvas_remove".}
+proc tvgCanvasRemove*(
+  canvas: TvgCanvas, paint: TvgPaint
+): TvgResult {.importc: "tvg_canvas_remove".}
 
 proc tvgCanvasUpdate*(canvas: TvgCanvas): TvgResult {.importc: "tvg_canvas_update".}
 
-proc tvgCanvasDraw*(canvas: TvgCanvas, clear: bool): TvgResult {.importc: "tvg_canvas_draw".}
+proc tvgCanvasDraw*(
+  canvas: TvgCanvas, clear: bool
+): TvgResult {.importc: "tvg_canvas_draw".}
 
 proc tvgCanvasSync*(canvas: TvgCanvas): TvgResult {.importc: "tvg_canvas_sync".}
 
@@ -389,7 +393,9 @@ proc tvgShapeGetPath*(
   ptsCnt: ptr uint32,
 ): TvgResult {.importc: "tvg_shape_get_path".}
 
-proc tvgShapeSetStrokeWidth*(paint: TvgPaint, width: cfloat): TvgResult {.importc: "tvg_shape_set_stroke_width".}
+proc tvgShapeSetStrokeWidth*(
+  paint: TvgPaint, width: cfloat
+): TvgResult {.importc: "tvg_shape_set_stroke_width".}
 
 proc tvgShapeGetStrokeWidth*(
   paint: TvgPaint, width: ptr cfloat
@@ -599,7 +605,9 @@ proc tvgPictureSetAccessible*(
 
 proc tvgSceneNew*(): TvgPaint {.importc: "tvg_scene_new".}
 
-proc tvgSceneAdd*(scene: TvgPaint, paint: TvgPaint): TvgResult {.importc: "tvg_scene_add".}
+proc tvgSceneAdd*(
+  scene: TvgPaint, paint: TvgPaint
+): TvgResult {.importc: "tvg_scene_add".}
 
 proc tvgSceneInsert*(
   scene: TvgPaint, target: TvgPaint, at: TvgPaint
@@ -660,35 +668,57 @@ proc tvgSceneAddEffectTritone*(
 
 proc tvgTextNew*(): TvgPaint {.importc: "tvg_text_new".}
 
-proc tvgTextSetFont*(text: TvgPaint, name: cstring): TvgResult {.importc: "tvg_text_set_font".}
+proc tvgTextSetFont*(
+  text: TvgPaint, name: cstring
+): TvgResult {.importc: "tvg_text_set_font".}
 
-proc tvgTextSetSize*(text: TvgPaint, size: cfloat): TvgResult {.importc: "tvg_text_set_size".}
+proc tvgTextSetSize*(
+  text: TvgPaint, size: cfloat
+): TvgResult {.importc: "tvg_text_set_size".}
 
-proc tvgTextSetText*(text: TvgPaint, utf8: cstring): TvgResult {.importc: "tvg_text_set_text".}
+proc tvgTextSetText*(
+  text: TvgPaint, utf8: cstring
+): TvgResult {.importc: "tvg_text_set_text".}
 
 proc tvgTextGetText*(text: TvgPaint): cstring {.importc: "tvg_text_get_text".}
 
-proc tvgTextAlign*(text: TvgPaint, x: cfloat, y: cfloat): TvgResult {.importc: "tvg_text_align".}
+proc tvgTextAlign*(
+  text: TvgPaint, x: cfloat, y: cfloat
+): TvgResult {.importc: "tvg_text_align".}
 
-proc tvgTextLayout*(text: TvgPaint, w: cfloat, h: cfloat): TvgResult {.importc: "tvg_text_layout".}
+proc tvgTextLayout*(
+  text: TvgPaint, w: cfloat, h: cfloat
+): TvgResult {.importc: "tvg_text_layout".}
 
-proc tvgTextWrapMode*(text: TvgPaint, mode: TvgTextWrap): TvgResult {.importc: "tvg_text_wrap_mode".}
+proc tvgTextWrapMode*(
+  text: TvgPaint, mode: TvgTextWrap
+): TvgResult {.importc: "tvg_text_wrap_mode".}
 
 proc tvgTextLineCount*(text: TvgPaint): uint32 {.importc: "tvg_text_line_count".}
 
-proc tvgTextSpacing*(text: TvgPaint, letter: cfloat, line: cfloat): TvgResult {.importc: "tvg_text_spacing".}
+proc tvgTextSpacing*(
+  text: TvgPaint, letter: cfloat, line: cfloat
+): TvgResult {.importc: "tvg_text_spacing".}
 
-proc tvgTextSetItalic*(text: TvgPaint, shear: cfloat): TvgResult {.importc: "tvg_text_set_italic".}
+proc tvgTextSetItalic*(
+  text: TvgPaint, shear: cfloat
+): TvgResult {.importc: "tvg_text_set_italic".}
 
 proc tvgTextSetOutline*(
   text: TvgPaint, width: cfloat, r: uint8, g: uint8, b: uint8
 ): TvgResult {.importc: "tvg_text_set_outline".}
 
-proc tvgTextSetColor*(text: TvgPaint, r: uint8, g: uint8, b: uint8): TvgResult {.importc: "tvg_text_set_color".}
+proc tvgTextSetColor*(
+  text: TvgPaint, r: uint8, g: uint8, b: uint8
+): TvgResult {.importc: "tvg_text_set_color".}
 
-proc tvgTextSetGradient*(text: TvgPaint, gradient: TvgGradient): TvgResult {.importc: "tvg_text_set_gradient".}
+proc tvgTextSetGradient*(
+  text: TvgPaint, gradient: TvgGradient
+): TvgResult {.importc: "tvg_text_set_gradient".}
 
-proc tvgTextGetTextMetrics*(text: TvgPaint, metrics: ptr TvgTextMetrics): TvgResult {.importc: "tvg_text_get_text_metrics".}
+proc tvgTextGetTextMetrics*(
+  text: TvgPaint, metrics: ptr TvgTextMetrics
+): TvgResult {.importc: "tvg_text_get_text_metrics".}
 
 proc tvgTextGetGlyphMetrics*(
   text: TvgPaint, ch: cstring, metrics: ptr TvgGlyphMetrics
@@ -709,11 +739,7 @@ proc tvgSaverSavePaint*(
 ): TvgResult {.importc: "tvg_saver_save_paint".}
 
 proc tvgSaverSaveAnimation*(
-  saver: TvgSaver,
-  animation: TvgAnimation,
-  path: cstring,
-  quality: uint32,
-  fps: uint32,
+  saver: TvgSaver, animation: TvgAnimation, path: cstring, quality: uint32, fps: uint32
 ): TvgResult {.importc: "tvg_saver_save_animation".}
 
 proc tvgSaverSync*(saver: TvgSaver): TvgResult {.importc: "tvg_saver_sync".}
@@ -722,15 +748,25 @@ proc tvgSaverDel*(saver: TvgSaver): TvgResult {.importc: "tvg_saver_del".}
 
 proc tvgAnimationNew*(): TvgAnimation {.importc: "tvg_animation_new".}
 
-proc tvgAnimationSetFrame*(animation: TvgAnimation, no: cfloat): TvgResult {.importc: "tvg_animation_set_frame".}
+proc tvgAnimationSetFrame*(
+  animation: TvgAnimation, no: cfloat
+): TvgResult {.importc: "tvg_animation_set_frame".}
 
-proc tvgAnimationGetPicture*(animation: TvgAnimation): TvgPaint {.importc: "tvg_animation_get_picture".}
+proc tvgAnimationGetPicture*(
+  animation: TvgAnimation
+): TvgPaint {.importc: "tvg_animation_get_picture".}
 
-proc tvgAnimationGetFrame*(animation: TvgAnimation, no: ptr cfloat): TvgResult {.importc: "tvg_animation_get_frame".}
+proc tvgAnimationGetFrame*(
+  animation: TvgAnimation, no: ptr cfloat
+): TvgResult {.importc: "tvg_animation_get_frame".}
 
-proc tvgAnimationGetTotalFrame*(animation: TvgAnimation, cnt: ptr cfloat): TvgResult {.importc: "tvg_animation_get_total_frame".}
+proc tvgAnimationGetTotalFrame*(
+  animation: TvgAnimation, cnt: ptr cfloat
+): TvgResult {.importc: "tvg_animation_get_total_frame".}
 
-proc tvgAnimationGetDuration*(animation: TvgAnimation, duration: ptr cfloat): TvgResult {.importc: "tvg_animation_get_duration".}
+proc tvgAnimationGetDuration*(
+  animation: TvgAnimation, duration: ptr cfloat
+): TvgResult {.importc: "tvg_animation_get_duration".}
 
 proc tvgAnimationSetSegment*(
   animation: TvgAnimation, begin: cfloat, `end`: cfloat
@@ -740,7 +776,9 @@ proc tvgAnimationGetSegment*(
   animation: TvgAnimation, begin: ptr cfloat, `end`: ptr cfloat
 ): TvgResult {.importc: "tvg_animation_get_segment".}
 
-proc tvgAnimationDel*(animation: TvgAnimation): TvgResult {.importc: "tvg_animation_del".}
+proc tvgAnimationDel*(
+  animation: TvgAnimation
+): TvgResult {.importc: "tvg_animation_del".}
 
 proc tvgAccessorNew*(): TvgAccessor {.importc: "tvg_accessor_new".}
 
@@ -753,19 +791,31 @@ proc tvgAccessorSet*(
   data: pointer,
 ): TvgResult {.importc: "tvg_accessor_set".}
 
-proc tvgAccessorGenerateId*(name: cstring): uint32 {.importc: "tvg_accessor_generate_id".}
+proc tvgAccessorGenerateId*(
+  name: cstring
+): uint32 {.importc: "tvg_accessor_generate_id".}
 
-proc tvgAccessorGetName*(accessor: TvgAccessor, id: uint32): cstring {.importc: "tvg_accessor_get_name".}
+proc tvgAccessorGetName*(
+  accessor: TvgAccessor, id: uint32
+): cstring {.importc: "tvg_accessor_get_name".}
 
 proc tvgLottieAnimationNew*(): TvgAnimation {.importc: "tvg_lottie_animation_new".}
 
-proc tvgLottieAnimationGenSlot*(animation: TvgAnimation, slot: cstring): uint32 {.importc: "tvg_lottie_animation_gen_slot".}
+proc tvgLottieAnimationGenSlot*(
+  animation: TvgAnimation, slot: cstring
+): uint32 {.importc: "tvg_lottie_animation_gen_slot".}
 
-proc tvgLottieAnimationApplySlot*(animation: TvgAnimation, id: uint32): TvgResult {.importc: "tvg_lottie_animation_apply_slot".}
+proc tvgLottieAnimationApplySlot*(
+  animation: TvgAnimation, id: uint32
+): TvgResult {.importc: "tvg_lottie_animation_apply_slot".}
 
-proc tvgLottieAnimationDelSlot*(animation: TvgAnimation, id: uint32): TvgResult {.importc: "tvg_lottie_animation_del_slot".}
+proc tvgLottieAnimationDelSlot*(
+  animation: TvgAnimation, id: uint32
+): TvgResult {.importc: "tvg_lottie_animation_del_slot".}
 
-proc tvgLottieAnimationSetMarker*(animation: TvgAnimation, marker: cstring): TvgResult {.importc: "tvg_lottie_animation_set_marker".}
+proc tvgLottieAnimationSetMarker*(
+  animation: TvgAnimation, marker: cstring
+): TvgResult {.importc: "tvg_lottie_animation_set_marker".}
 
 proc tvgLottieAnimationGetMarkersCnt*(
   animation: TvgAnimation, cnt: ptr uint32
@@ -787,7 +837,9 @@ proc tvgLottieAnimationTween*(
   animation: TvgAnimation, `from`: cfloat, to: cfloat, progress: cfloat
 ): TvgResult {.importc: "tvg_lottie_animation_tween".}
 
-proc tvgLottieAnimationSetQuality*(animation: TvgAnimation, value: uint8): TvgResult {.importc: "tvg_lottie_animation_set_quality".}
+proc tvgLottieAnimationSetQuality*(
+  animation: TvgAnimation, value: uint8
+): TvgResult {.importc: "tvg_lottie_animation_set_quality".}
 
 type TvgAudioInfo* {.bycopy.} = object
   src*: cstring
