@@ -53,8 +53,7 @@ proc main() =
     
     # Create a software canvas
     let canvas = newSwCanvas()
-    let bufferPtr = cast[ptr uint32](addr myBuffer[0])
-    canvas.setTarget(bufferPtr, 800u32, 800u32, 600u32, ColorspaceARGB8888)
+    canvas.setTarget(myBuffer, 800u32, 800u32, 600u32, ColorspaceARGB8888)
     
     # Create shapes using fluent API
     let rect = newRect(50, 50, 200, 150, rx = 10)
